@@ -1,0 +1,19 @@
+REQUERIMIENTOS
+- Creacion de grupos 
+- Buscar personal y dia 1 por 1 o por grupos
+- Añadir novedades por grupos o individual
+- Conectar novedades y programacion con el excel
+- Añadir novedades en base a dia, nombre, programacion, biometrico
+
+FUNCIONALES
+1- Gestion de grupos
+2- Ingreso de novedades grupal e individual
+3- Escribir en excel sin borrar datos previos
+4- Validacion de datos impedir valores no permitidos
+
+NO FUNCIONALES
+1- Interfaz simple
+2- No corromper el archivo excel
+3- Portabilidad sin necesidad de python
+4- Hacer el codigo por capas para migracion a sql
+5- Rendimiento
