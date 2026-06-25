@@ -1,4 +1,4 @@
-from ProgramacionNomina.Backend.database.app_database import leer_json, escribir_json, siguiente_id_json
+from Backend.database.app_database import leer_json, escribir_json, siguiente_id_json
  
  
 class Empleado:
@@ -84,7 +84,7 @@ class Empleado:
         return nuevo
  
     @staticmethod
-    def obj_desde_dict():
+    def obtener_todos():
         """Retorna lista de objetos Empleado."""
         datos = leer_json()
         return [Empleado.crear_emp_desde_dict(e) for e in datos["empleados"]]

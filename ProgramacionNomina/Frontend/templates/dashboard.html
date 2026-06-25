@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEN – Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111318;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      background: #1a1d24;
+      border-right: 1px solid #2a2d36;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      padding: 1.5rem 1rem;
+    }
+
+    .sidebar-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .sidebar-sub {
+      font-size: 0.65rem;
+      color: #475569;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #475569;
+      margin: 1rem 0 0.4rem 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 7px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 0.15rem;
+    }
+
+    .nav-link:hover, .nav-link.activo {
+      background: #2a2d36;
+      color: #e2e8f0;
+    }
+
+    .nav-link i { font-size: 1rem; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      border-top: 1px solid #2a2d36;
+      padding-top: 1rem;
+    }
+
+    .nav-link.cerrar { color: #ef4444; }
+    .nav-link.cerrar:hover { background: rgba(239,68,68,0.1); color: #ef4444; }
+
+    /* ── CONTENIDO ── */
+    .contenido {
+      margin-left: 220px;
+      flex: 1;
+      padding: 2rem;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .topbar h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .topbar-usuario {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1a1d24;
+      border: 1px solid #2a2d36;
+      border-radius: 8px;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    /* ── CARDS RESUMEN ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: #1a1d24;
+      border: 1px solid #2a2d36;
+      border-radius: 10px;
+      padding: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card-icono {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .card-icono.azul  { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    .card-icono.verde { background: rgba(34,197,94,0.15);  color: #22c55e; }
+    .card-icono.mora  { background: rgba(168,85,247,0.15); color: #a855f7; }
+
+    .card-info .numero {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .card-info .etiqueta {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
+
+    /* ── ACCESOS RAPIDOS ── */
+    .seccion-titulo {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #475569;
+      margin-bottom: 1rem;
+    }
+
+    .accesos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .acceso-btn {
+      background: #1a1d24;
+      border: 1px solid #2a2d36;
+      border-radius: 10px;
+      padding: 1.3rem;
+      text-decoration: none;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .acceso-btn:hover {
+      border-color: #3b82f6;
+      background: #1e2330;
+      color: #fff;
+    }
+
+    .acceso-btn i {
+      font-size: 1.3rem;
+      color: #3b82f6;
+    }
+
+    .acceso-btn .desc {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">SEN</div>
+  <div class="sidebar-sub">Sistema de Nómina</div>
+
+  <div class="sidebar-label">Principal</div>
+  <a href="/dashboard" class="nav-link activo">
+    <i class="bi bi-speedometer2"></i> Dashboard
+  </a>
+
+  <div class="sidebar-label">Gestión</div>
+  <a href="/empleados" class="nav-link">
+    <i class="bi bi-people-fill"></i> Empleados
+  </a>
+  <a href="/grupos" class="nav-link">
+    <i class="bi bi-diagram-3-fill"></i> Grupos
+  </a>
+
+  <div class="sidebar-footer">
+    <a href="/logout" class="nav-link cerrar">
+      <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
+    </a>
+  </div>
+</nav>
+
+<!-- CONTENIDO -->
+<main class="contenido">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <h1>Dashboard</h1>
+    <div class="topbar-usuario">
+      <i class="bi bi-person-circle"></i>
+      {{ usuario }} &nbsp;·&nbsp; <span style="color:#3b82f6">{{ rol }}</span>
+    </div>
+  </div>
+
+  <!-- CARDS RESUMEN -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-icono azul"><i class="bi bi-people-fill"></i></div>
+      <div class="card-info">
+        <div class="numero">{{ total_empleados }}</div>
+        <div class="etiqueta">Empleados activos</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icono verde"><i class="bi bi-diagram-3-fill"></i></div>
+      <div class="card-info">
+        <div class="numero">{{ total_grupos }}</div>
+        <div class="etiqueta">Grupos creados</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icono mora"><i class="bi bi-shield-lock-fill"></i></div>
+      <div class="card-info">
+        <div class="numero">Admin</div>
+        <div class="etiqueta">Nivel de acceso</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCESOS RAPIDOS -->
+  <div class="seccion-titulo">Accesos rápidos</div>
+  <div class="accesos">
+    <a href="/empleados/crear" class="acceso-btn">
+      <i class="bi bi-person-plus-fill"></i>
+      <div>
+        <div>Crear Empleado</div>
+        <div class="desc">Registrar nuevo trabajador</div>
+      </div>
+    </a>
+    <a href="/grupos/crear" class="acceso-btn">
+      <i class="bi bi-plus-circle-fill"></i>
+      <div>
+        <div>Crear Grupo</div>
+        <div class="desc">Nuevo grupo de trabajo</div>
+      </div>
+    </a>
+    <a href="/empleados" class="acceso-btn">
+      <i class="bi bi-list-ul"></i>
+      <div>
+        <div>Ver Empleados</div>
+        <div class="desc">Lista de todos los empleados</div>
+      </div>
+    </a>
+    <a href="/grupos" class="acceso-btn">
+      <i class="bi bi-grid-fill"></i>
+      <div>
+        <div>Ver Grupos</div>
+        <div class="desc">Lista de todos los grupos</div>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+</body>
+</html>

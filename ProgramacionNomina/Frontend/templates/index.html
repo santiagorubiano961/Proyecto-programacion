@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEN – Iniciar Sesión</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111318;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 340px;
+      background: #1a1d24;
+      border: 1px solid #2a2d36;
+      border-radius: 12px;
+      padding: 2.2rem 2rem;
+    }
+
+    /* Logo */
+    .logo {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .logo-texto {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: 5px;
+      color: #fff;
+    }
+
+    .logo-sub {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
+
+    /* Separador */
+    hr {
+      border: none;
+      border-top: 1px solid #2a2d36;
+      margin-bottom: 1.6rem;
+    }
+
+    /* Campos */
+    .campo {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 0.35rem;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      background: #111318;
+      border: 1px solid #2a2d36;
+      border-radius: 7px;
+      color: #e2e8f0;
+      font-size: 0.88rem;
+      padding: 0.6rem 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #3b82f6;
+    }
+
+    input::placeholder { color: #3a3f4a; }
+
+    /* Error */
+    .error {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 7px;
+      color: #f87171;
+      font-size: 0.78rem;
+      padding: 0.55rem 0.8rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Botón */
+    button {
+      width: 100%;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.65rem;
+      cursor: pointer;
+      margin-top: 0.4rem;
+      transition: background 0.2s;
+    }
+
+    button:hover { background: #2563eb; }
+
+    /* Pie */
+    .pie {
+      text-align: center;
+      font-size: 0.68rem;
+      color: #374151;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo">
+    <div class="logo-texto">SEN</div>
+    <div class="logo-sub">Sistema Empresarial de Nómina</div>
+  </div>
+
+  <hr />
+
+  {% if error %}
+  <div class="error">
+    <i class="bi bi-exclamation-circle-fill"></i> {{ error }}
+  </div>
+  {% endif %}
+
+  <form method="POST" action="/login">
+
+    <div class="campo">
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" name="usuario" placeholder="admin" required autofocus />
+    </div>
+
+    <div class="campo">
+      <label for="contrasena">Contraseña</label>
+      <input type="password" id="contrasena" name="contrasena" placeholder="••••••••" required />
+    </div>
+
+    <button type="submit">Ingresar</button>
+
+  </form>
+
+</div>
+
+<div class="pie">ENII · Tocancipá 2026</div>
+
+</body>
+</html>

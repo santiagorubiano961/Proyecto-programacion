@@ -1,4 +1,23 @@
 {
-    "empleados":[],
-    "grupos":[]
+  "usuarios": [
+    {
+      "id": 1,
+      "usuario": "admin",
+      "contrasena": "admin123",
+      "rol": "admin"
+    }
+  ],
+  "empleados": [
+    {
+      "id": 1,
+      "nombre": "santiago Rubiano",
+      "documento": "1072644661",
+      "cargo": "operario",
+      "fecha_contrato": "2026-12-03",
+      "salario_base": 1750000.0,
+      "id_grupo": null,
+      "estado": "activo"
+    }
+  ],
+  "grupos": []
 }

@@ -1,4 +1,4 @@
-from ProgramacionNomina.Backend.database.app_database import leer_json, escribir_json, siguiente_id_json
+from Backend.database.app_database import leer_json, escribir_json, siguiente_id_json
  
  
 class Grupo:
