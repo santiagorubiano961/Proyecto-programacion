@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SEN – Empleados</title>
+  <title>SEN – Novedades</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -20,18 +20,21 @@
     .contenido { margin-left: 220px; flex: 1; padding: 2rem; }
     .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
     .topbar h1 { font-size: 1.2rem; font-weight: 700; color: #fff; }
-    .btn-nuevo { display: flex; align-items: center; gap: 0.4rem; background: #3b82f6; color: #fff; text-decoration: none; padding: 0.5rem 1rem; border-radius: 7px; font-size: 0.85rem; font-weight: 600; transition: background 0.2s; }
+    .btn-nuevo { display: flex; align-items: center; gap: 0.4rem; background: #3b82f6; color: #fff; text-decoration: none; padding: 0.5rem 1rem; border-radius: 7px; font-size: 0.85rem; font-weight: 600; }
     .btn-nuevo:hover { background: #2563eb; }
+    .alerta { border-radius: 7px; padding: 0.6rem 0.85rem; font-size: 0.8rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .alerta.exito { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); color: #4ade80; }
     .tabla-card { background: #1a1d24; border: 1px solid #2a2d36; border-radius: 12px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
     thead th { background: #0f1218; padding: 0.75rem 1rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #475569; text-align: left; }
-    tbody td { padding: 0.85rem 1rem; font-size: 0.85rem; border-top: 1px solid #2a2d36; }
+    tbody td { padding: 0.8rem 1rem; font-size: 0.83rem; border-top: 1px solid #2a2d36; }
     tbody tr:hover { background: #1e2330; }
-    .badge { padding: 0.25rem 0.6rem; border-radius: 5px; font-size: 0.72rem; font-weight: 600; }
-    .badge.activo   { background: rgba(34,197,94,0.15);  color: #4ade80; }
-    .badge.inactivo { background: rgba(239,68,68,0.15);  color: #f87171; }
+    .badge { padding: 0.2rem 0.55rem; border-radius: 5px; font-size: 0.7rem; font-weight: 600; }
+    .badge-tipo { background: rgba(59,130,246,0.15); color: #60a5fa; }
     .vacio { text-align: center; padding: 3rem; color: #475569; }
     .vacio i { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .btn-elim { background: rgba(239,68,68,0.15); color: #f87171; border: none; padding: 0.25rem 0.6rem; border-radius: 5px; font-size: 0.75rem; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
+    .btn-elim:hover { background: rgba(239,68,68,0.3); }
   </style>
 </head>
 <body>
@@ -41,49 +44,60 @@
   <div class="sidebar-label">Principal</div>
   <a href="/dashboard" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
   <div class="sidebar-label">Gestión</div>
-  <a href="/empleados" class="nav-link activo"><i class="bi bi-people-fill"></i> Empleados</a>
+  <a href="/empleados" class="nav-link"><i class="bi bi-people-fill"></i> Empleados</a>
   <a href="/grupos" class="nav-link"><i class="bi bi-diagram-3-fill"></i> Grupos</a>
   <div class="sidebar-label">Nómina</div>
-<a href="/novedades" class="nav-link">
-  <i class="bi bi-journal-medical"></i> Novedades
-</a>
-<a href="/nomina" class="nav-link">
-  <i class="bi bi-calculator-fill"></i> Liquidar
-</a>
+  <a href="/novedades" class="nav-link activo"><i class="bi bi-journal-medical"></i> Novedades</a>
+  <a href="/nomina" class="nav-link"><i class="bi bi-calculator-fill"></i> Liquidar</a>
   <div class="sidebar-footer">
     <a href="/logout" class="nav-link cerrar"><i class="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
   </div>
 </nav>
 <main class="contenido">
   <div class="topbar">
-    <h1>Empleados</h1>
-    <a href="/empleados/crear" class="btn-nuevo"><i class="bi bi-person-plus-fill"></i> Nuevo Empleado</a>
+    <h1>Novedades</h1>
+    <a href="/novedades/crear" class="btn-nuevo"><i class="bi bi-plus-circle-fill"></i> Nueva Novedad</a>
   </div>
+
+  {% if mensaje %}
+  <div class="alerta exito"><i class="bi bi-check-circle-fill"></i> {{ mensaje }}</div>
+  {% endif %}
+
   <div class="tabla-card">
-    {% if empleados %}
+    {% if novedades %}
     <table>
       <thead>
         <tr>
-          <th>Nombre</th>
-          <th>Documento</th>
-          <th>Cargo</th>
-          <th>Salario Base</th>
-          <th>F. Contrato</th>
-          <th>Estado</th>
-          <th>ACCIONES</th>
+          <th>Empleado</th>
+          <th>Período</th>
+          <th>Tipo</th>
+          <th>Descripción</th>
+          <th>H. Extra Diur.</th>
+          <th>H. Extra Noct.</th>
+          <th>Días Inc.</th>
+          <th>Días Vac.</th>
+          <th>Días Permiso</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        {% for e in empleados %}
+        {% for n in novedades %}
         <tr>
-          <td><i class="bi bi-person-circle" style="color:#3b82f6;margin-right:0.4rem"></i>{{ e.nombre }}</td>
-          <td style="color:#64748b">{{ e.documento }}</td>
-          <td>{{ e.cargo }}</td>
-          <td style="color:#4ade80">${{ "{:,.0f}".format(e.salario_base).replace(",",".") }}</td>
-          <td style="color:#64748b">{{ e.fecha_contrato }}</td>
-          <td><span class="badge {{ e.estado }}">{{ e.estado }}</span></td>
+          <td><i class="bi bi-person-circle" style="color:#3b82f6;margin-right:0.4rem"></i>
+            {{ emp_map.get(n.id_empleado, 'N/A') }}</td>
+          <td style="color:#94a3b8">{{ n.periodo }}</td>
+          <td><span class="badge badge-tipo">{{ n.tipo }}</span></td>
+          <td style="color:#64748b">{{ n.descripcion or '—' }}</td>
+          <td>{{ n.extra_diurnas }}h</td>
+          <td>{{ n.extra_nocturnas }}h</td>
+          <td>{{ n.dias_incapacidad }}d</td>
+          <td>{{ n.dias_vacaciones }}d</td>
+          <td>{{ n.dias_permiso }}d</td>
           <td>
-          <a href="{{ url_for('rutas.editar_empleado', emp_id=e.id) }}" class="btn btn-warning btn-sm">Editar</a>
+            <a href="/novedades/eliminar/{{ n.id }}" class="btn-elim"
+               onclick="return confirm('¿Eliminar esta novedad?')">
+              <i class="bi bi-trash-fill"></i>
+            </a>
           </td>
         </tr>
         {% endfor %}
@@ -91,9 +105,9 @@
     </table>
     {% else %}
     <div class="vacio">
-      <i class="bi bi-people"></i>
-      No hay empleados registrados aún.
-      <br><a href="/empleados/crear" style="color:#3b82f6;font-size:0.85rem;margin-top:0.5rem;display:inline-block">Crear el primero →</a>
+      <i class="bi bi-journal-x"></i>
+      No hay novedades registradas.
+      <br><a href="/novedades/crear" style="color:#3b82f6;font-size:0.85rem;margin-top:0.5rem;display:inline-block">Registrar primera →</a>
     </div>
     {% endif %}
   </div>

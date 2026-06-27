@@ -46,7 +46,7 @@ class Grupo:
     # ── Métodos CRUD ─────────────────────────────────────────
  
     @staticmethod
-    def crear(nombre, linea_grupo, programacion_grupo):
+    def crear_grupo(nombre, linea_grupo, programacion_grupo):
         """
         Crea y guarda un nuevo grupo.
         Retorna el objeto Grupo creado.

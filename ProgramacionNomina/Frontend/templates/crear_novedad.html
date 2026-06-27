@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEN – Nueva Novedad</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #111318; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: #1a1d24; border-right: 1px solid #2a2d36; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; padding: 1.5rem 1rem; }
+    .sidebar-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 4px; color: #fff; text-align: center; margin-bottom: 0.3rem; }
+    .sidebar-sub  { font-size: 0.65rem; color: #475569; text-align: center; margin-bottom: 2rem; }
+    .sidebar-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #475569; margin: 1rem 0 0.4rem 0.5rem; }
+    .nav-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; border-radius: 7px; color: #94a3b8; text-decoration: none; font-size: 0.85rem; transition: background 0.2s; margin-bottom: 0.15rem; }
+    .nav-link:hover, .nav-link.activo { background: #2a2d36; color: #e2e8f0; }
+    .nav-link i { font-size: 1rem; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid #2a2d36; padding-top: 1rem; }
+    .nav-link.cerrar { color: #ef4444; }
+    .nav-link.cerrar:hover { background: rgba(239,68,68,0.1); }
+    .contenido { margin-left: 220px; flex: 1; padding: 2rem; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .topbar h1 { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .volver { display: flex; align-items: center; gap: 0.4rem; color: #64748b; text-decoration: none; font-size: 0.82rem; }
+    .volver:hover { color: #e2e8f0; }
+    .form-card { background: #1a1d24; border: 1px solid #2a2d36; border-radius: 12px; padding: 2rem; max-width: 700px; }
+    .seccion { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #475569; margin: 1.5rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid #2a2d36; }
+    .seccion:first-of-type { margin-top: 0; }
+    .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fila-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    .campo { margin-bottom: 0.9rem; }
+    label { display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.3rem; font-weight: 500; }
+    input, select { width: 100%; background: #111318; border: 1px solid #2a2d36; border-radius: 7px; color: #e2e8f0; font-size: 0.88rem; padding: 0.6rem 0.85rem; outline: none; transition: border-color 0.2s; }
+    input:focus, select:focus { border-color: #3b82f6; }
+    input::placeholder { color: #3a3f4a; }
+    select option { background: #1a1d24; }
+    .alerta { border-radius: 7px; padding: 0.6rem 0.85rem; font-size: 0.8rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .alerta.error { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
+    .botones { display: flex; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #2a2d36; }
+    .btn { padding: 0.6rem 1.3rem; border-radius: 7px; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; text-decoration: none; display: flex; align-items: center; gap: 0.4rem; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-cancelar { background: #2a2d36; color: #94a3b8; }
+    .btn-cancelar:hover { background: #363a45; color: #e2e8f0; }
+    /* Filtro por grupo */
+    .filtro-grupo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .filtro-grupo select { max-width: 220px; }
+    .filtro-grupo label { margin: 0; white-space: nowrap; }
+  </style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo">SEN</div>
+  <div class="sidebar-sub">Sistema de Nómina</div>
+  <div class="sidebar-label">Principal</div>
+  <a href="/dashboard" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+  <div class="sidebar-label">Gestión</div>
+  <a href="/empleados" class="nav-link"><i class="bi bi-people-fill"></i> Empleados</a>
+  <a href="/grupos" class="nav-link"><i class="bi bi-diagram-3-fill"></i> Grupos</a>
+  <div class="sidebar-label">Nómina</div>
+  <a href="/novedades" class="nav-link activo"><i class="bi bi-journal-medical"></i> Novedades</a>
+  <a href="/nomina" class="nav-link"><i class="bi bi-calculator-fill"></i> Liquidar</a>
+  <div class="sidebar-footer">
+    <a href="/logout" class="nav-link cerrar"><i class="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
+  </div>
+</nav>
+<main class="contenido">
+  <div class="topbar">
+    <h1>Registrar Novedad</h1>
+    <a href="/novedades" class="volver"><i class="bi bi-arrow-left"></i> Volver</a>
+  </div>
+
+  {% if error %}
+  <div class="alerta error"><i class="bi bi-exclamation-circle-fill"></i> {{ error }}</div>
+  {% endif %}
+
+  <div class="form-card">
+    <form method="POST" action="/novedades/crear">
+
+      <div class="seccion">Información General</div>
+      <div class="fila">
+        <div class="campo">
+          <label>Empleado *</label>
+          <!-- Filtro por grupo -->
+          <div class="filtro-grupo">
+            <label style="color:#475569">Filtrar por grupo:</label>
+            <select id="filtro-grupo" onchange="filtrarEmpleados()">
+              <option value="">Todos</option>
+              {% for g in grupos %}
+              <option value="{{ g.id }}">{{ g.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <select name="id_empleado" id="select-empleado" required>
+            <option value="">— Seleccione un empleado —</option>
+            {% for e in empleados %}
+            {% if e.estado == 'activo' %}
+            <option value="{{ e.id }}" data-grupo="{{ e.id_grupo }}">
+              {{ e.nombre }} — {{ e.cargo }}
+            </option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <div class="campo">
+          <label>Período *</label>
+          <input type="month" name="periodo" required />
+        </div>
+      </div>
+      <div class="fila">
+        <div class="campo">
+          <label>Tipo de Novedad</label>
+          <select name="tipo">
+            <option value="horas_extras">Horas Extras</option>
+            <option value="incapacidad">Incapacidad</option>
+            <option value="vacaciones">Vacaciones</option>
+            <option value="permiso">Permiso</option>
+            <option value="festivo">Festivo / Dominical</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Descripción</label>
+          <input type="text" name="descripcion" placeholder="Descripción breve..." />
+        </div>
+      </div>
+
+      <div class="seccion">Horas Extras</div>
+      <div class="fila-3">
+        <div class="campo">
+          <label>Extra Diurnas (h) <span style="color:#475569">+25%</span></label>
+          <input type="number" name="extra_diurnas" value="0" min="0" step="0.5" />
+        </div>
+        <div class="campo">
+          <label>Extra Nocturnas (h) <span style="color:#475569">+75%</span></label>
+          <input type="number" name="extra_nocturnas" value="0" min="0" step="0.5" />
+        </div>
+        <div class="campo">
+          <label>Recargo Nocturno (h) <span style="color:#475569">+35%</span></label>
+          <input type="number" name="recargos_nocturnos" value="0" min="0" step="0.5" />
+        </div>
+      </div>
+
+      <div class="seccion">Festivos y Dominicales</div>
+      <div class="fila-3">
+        <div class="campo">
+          <label>Festivo Diurno (h) <span style="color:#475569">+75%</span></label>
+          <input type="number" name="recargos_festivos" value="0" min="0" step="0.5" />
+        </div>
+        <div class="campo">
+          <label>Festivo Nocturno (h) <span style="color:#475569">+110%</span></label>
+          <input type="number" name="recargos_fest_noct" value="0" min="0" step="0.5" />
+        </div>
+        <div class="campo">
+          <label>Dominical Diurno (h) <span style="color:#475569">+75%</span></label>
+          <input type="number" name="horas_dom_diurnas" value="0" min="0" step="0.5" />
+        </div>
+      </div>
+      <div class="fila-3">
+        <div class="campo">
+          <label>Dominical Nocturno (h) <span style="color:#475569">+110%</span></label>
+          <input type="number" name="horas_dom_nocturnas" value="0" min="0" step="0.5" />
+        </div>
+      </div>
+
+      <div class="seccion">Ausencias</div>
+      <div class="fila-3">
+        <div class="campo">
+          <label>Días Incapacidad <span style="color:#475569">66.67%</span></label>
+          <input type="number" name="dias_incapacidad" value="0" min="0" />
+        </div>
+        <div class="campo">
+          <label>Días Vacaciones <span style="color:#475569">50%</span></label>
+          <input type="number" name="dias_vacaciones" value="0" min="0" />
+        </div>
+        <div class="campo">
+          <label>Días Permiso <span style="color:#475569">sin pago</span></label>
+          <input type="number" name="dias_permiso" value="0" min="0" />
+        </div>
+      </div>
+
+      <div class="botones">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-lg"></i> Registrar Novedad
+        </button>
+        <a href="/novedades" class="btn btn-cancelar">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+<script>
+  function filtrarEmpleados() {
+    const grupoId  = document.getElementById('filtro-grupo').value;
+    const select   = document.getElementById('select-empleado');
+    const opciones = select.querySelectorAll('option');
+    opciones.forEach(op => {
+      if (!op.value) return; // placeholder
+      if (!grupoId || op.dataset.grupo == grupoId) {
+        op.style.display = '';
+      } else {
+        op.style.display = 'none';
+      }
+    });
+    select.value = '';
+  }
+</script>
+</body>
+</html>

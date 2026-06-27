@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SEN – Crear Empleado</title>
+  <title>SEN – Editar Empleado</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -85,7 +85,7 @@
       gap: 0.5rem;
     }
 
-    .form-card h2 i { color: #3b82f6; }
+    .form-card h2 i { color: #eab308; } /* Color amarillo para diferenciar la edición */
 
     .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
@@ -112,22 +112,15 @@
     }
 
     input:focus, select:focus { border-color: #3b82f6; }
-    input::placeholder { color: #3a3f4a; }
+    
+    /* Campos de solo lectura */
+    input[readonly] {
+      background: #1a1d24;
+      color: #64748b;
+      cursor: not-allowed;
+    }
 
     select option { background: #1a1d24; }
-
-    /* Error */
-    .alerta {
-      border-radius: 7px;
-      padding: 0.6rem 0.85rem;
-      font-size: 0.8rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .alerta.error   { background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.25);  color: #f87171; }
-    .alerta.exito   { background: rgba(34,197,94,0.08);  border: 1px solid rgba(34,197,94,0.25);  color: #4ade80; }
 
     /* Botones */
     .botones {
@@ -152,8 +145,8 @@
       gap: 0.4rem;
     }
 
-    .btn-primary { background: #3b82f6; color: #fff; }
-    .btn-primary:hover { background: #2563eb; }
+    .btn-warning { background: #eab308; color: #111318; }
+    .btn-warning:hover { background: #ca8a04; }
     .btn-secondary { background: #2a2d36; color: #94a3b8; }
     .btn-secondary:hover { background: #363a45; color: #e2e8f0; }
   </style>
@@ -169,12 +162,8 @@
   <a href="/empleados" class="nav-link activo"><i class="bi bi-people-fill"></i> Empleados</a>
   <a href="/grupos" class="nav-link"><i class="bi bi-diagram-3-fill"></i> Grupos</a>
   <div class="sidebar-label">Nómina</div>
-<a href="/novedades" class="nav-link">
-  <i class="bi bi-journal-medical"></i> Novedades
-</a>
-<a href="/nomina" class="nav-link">
-  <i class="bi bi-calculator-fill"></i> Liquidar
-</a>
+  <a href="/novedades" class="nav-link"><i class="bi bi-journal-medical"></i> Novedades</a>
+  <a href="/nomina" class="nav-link"><i class="bi bi-calculator-fill"></i> Liquidar</a>
   <div class="sidebar-footer">
     <a href="/logout" class="nav-link cerrar"><i class="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
   </div>
@@ -183,63 +172,58 @@
 <main class="contenido">
 
   <div class="topbar">
-    <h1>Crear Empleado</h1>
+    <h1>Editar Empleado</h1>
     <a href="/empleados" class="volver"><i class="bi bi-arrow-left"></i> Volver</a>
   </div>
 
-  {% if error %}
-  <div class="alerta error"><i class="bi bi-exclamation-circle-fill"></i> {{ error }}</div>
-  {% endif %}
-  {% if exito %}
-  <div class="alerta exito"><i class="bi bi-check-circle-fill"></i> {{ exito }}</div>
-  {% endif %}
-
   <div class="form-card">
-    <h2><i class="bi bi-person-plus-fill"></i> Datos del Empleado</h2>
+    <h2><i class="bi bi-pencil-square"></i> Modificando a: {{ empleado.nombre }}</h2>
 
-    <form method="POST" action="/empleados/crear">
+    <form method="POST" action="/empleados/editar/{{ empleado.id }}">
 
       <div class="fila">
         <div class="campo">
           <label>Nombre completo *</label>
-          <input type="text" name="nombre" placeholder="Ej: Juan Carlos Pérez" required />
+          <input type="text" name="nombre" value="{{ empleado.nombre }}" required />
         </div>
         <div class="campo">
-          <label>Número de documento *</label>
-          <input type="text" name="documento" placeholder="Ej: 10234567" required />
+          <label>Número de documento (No editable)</label>
+          <input type="text" name="documento" value="{{ empleado.documento }}" readonly />
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
           <label>Cargo *</label>
-          <input type="text" name="cargo" placeholder="Ej: Operario" required />
+          <input type="text" name="cargo" value="{{ empleado.cargo }}" required />
         </div>
         <div class="campo">
-          <label>Fecha de contratación *</label>
-          <input type="date" name="fecha_contrato" required />
+          <label>Fecha de contratación (No editable)</label>
+          <input type="date" name="fecha_contrato" value="{{ empleado.fecha_contrato }}" readonly />
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
           <label>Salario base (COP) *</label>
-          <input type="number" name="salario_base" placeholder="Ej: 1423500" min="0" required />
+          <input type="number" name="salario_base" value="{{ empleado.salario_base | int }}" min="0" required />
         </div>
         <div class="campo">
           <label>Grupo</label>
           <select name="id_grupo">
             <option value="">— Sin grupo —</option>
             {% for g in grupos %}
-            <option value="{{ g.id }}">{{ g.nombre }}</option>
+            <option value="{{ g.id }}" {% if empleado.id_grupo == g.id %}selected{% endif %}>
+              {{ g.nombre }}
+            </option>
             {% endfor %}
           </select>
         </div>
       </div>
 
       <div class="botones">
-        <button type="submit" class="btn btn-primary">
-          <i class="bi bi-check-lg"></i> Guardar Empleado
+        <button type="submit" class="btn btn-warning">
+          <i class="bi bi-save"></i> Actualizar Empleado
         </button>
         <a href="/empleados" class="btn btn-secondary">Cancelar</a>
       </div>

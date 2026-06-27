@@ -41,6 +41,13 @@
   <div class="sidebar-label">Gestión</div>
   <a href="/empleados" class="nav-link"><i class="bi bi-people-fill"></i> Empleados</a>
   <a href="/grupos" class="nav-link activo"><i class="bi bi-diagram-3-fill"></i> Grupos</a>
+  <div class="sidebar-label">Nómina</div>
+<a href="/novedades" class="nav-link">
+  <i class="bi bi-journal-medical"></i> Novedades
+</a>
+<a href="/nomina" class="nav-link">
+  <i class="bi bi-calculator-fill"></i> Liquidar
+</a>
   <div class="sidebar-footer">
     <a href="/logout" class="nav-link cerrar"><i class="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
   </div>
@@ -61,10 +68,16 @@
         <i class="bi bi-people-fill" style="color:#3b82f6"></i>
         {{ g.integrantes|length }} integrante(s)
       </div>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+          <a href="{{ url_for('rutas.editar_grupo', grupo_id=g.id) }}" style="background: #eab308; color: #111318; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.3rem;">
+              <i class="bi bi-pencil"></i> Editar
+          </a>
+          <a href="{{ url_for('rutas.eliminar_grupo', grupo_id=g.id) }}" onclick="return confirm('¿Estás seguro de que deseas eliminar este grupo? Esta acción no se puede deshacer.');" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.3rem; transition: background 0.2s;">
+              <i class="bi bi-trash"></i> Eliminar
+          </a>
+      </div>
     </div>
     {% endfor %}
-  </div>
-  {% else %}
   <div class="vacio">
     <i class="bi bi-diagram-3"></i>
     No hay grupos registrados aún.

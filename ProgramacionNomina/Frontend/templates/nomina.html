@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEN – Liquidar Nómina</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #111318; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: #1a1d24; border-right: 1px solid #2a2d36; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; padding: 1.5rem 1rem; }
+    .sidebar-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 4px; color: #fff; text-align: center; margin-bottom: 0.3rem; }
+    .sidebar-sub  { font-size: 0.65rem; color: #475569; text-align: center; margin-bottom: 2rem; }
+    .sidebar-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #475569; margin: 1rem 0 0.4rem 0.5rem; }
+    .nav-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; border-radius: 7px; color: #94a3b8; text-decoration: none; font-size: 0.85rem; transition: background 0.2s; margin-bottom: 0.15rem; }
+    .nav-link:hover, .nav-link.activo { background: #2a2d36; color: #e2e8f0; }
+    .nav-link i { font-size: 1rem; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid #2a2d36; padding-top: 1rem; }
+    .nav-link.cerrar { color: #ef4444; }
+    .nav-link.cerrar:hover { background: rgba(239,68,68,0.1); }
+    .contenido { margin-left: 220px; flex: 1; padding: 2rem; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .topbar h1 { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    /* Panel liquidar */
+    .panel { background: #1a1d24; border: 1px solid #2a2d36; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .panel h2 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: #fff; }
+    .panel h2 i { color: #3b82f6; }
+    .form-inline { display: flex; align-items: flex-end; gap: 1rem; }
+    label { display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.3rem; }
+    input[type=month] { background: #111318; border: 1px solid #2a2d36; border-radius: 7px; color: #e2e8f0; font-size: 0.88rem; padding: 0.6rem 0.85rem; outline: none; }
+    input[type=month]:focus { border-color: #3b82f6; }
+    .btn-calc { background: #3b82f6; color: #fff; border: none; border-radius: 7px; padding: 0.62rem 1.4rem; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; transition: background 0.2s; }
+    .btn-calc:hover { background: #2563eb; }
+    .alerta { border-radius: 7px; padding: 0.6rem 0.85rem; font-size: 0.8rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .alerta.error { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
+    /* Tabla resultados */
+    .tabla-card { background: #1a1d24; border: 1px solid #2a2d36; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+    .tabla-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.2rem; border-bottom: 1px solid #2a2d36; }
+    .tabla-header h3 { font-size: 0.9rem; font-weight: 600; color: #fff; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { background: #0f1218; padding: 0.7rem 1rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #475569; text-align: left; }
+    tbody td { padding: 0.8rem 1rem; font-size: 0.83rem; border-top: 1px solid #2a2d36; }
+    tbody tr:hover { background: #1e2330; }
+    tfoot td { padding: 0.8rem 1rem; font-size: 0.85rem; font-weight: 700; border-top: 2px solid #3b82f6; background: #0f1218; }
+    .verde  { color: #4ade80; }
+    .rojo   { color: #f87171; }
+    .azul   { color: #60a5fa; }
+    /* Histórico acordeón */
+    .historico-item { border: 1px solid #2a2d36; border-radius: 10px; margin-bottom: 0.6rem; overflow: hidden; }
+    .historico-header { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.2rem; background: #1a1d24; cursor: pointer; user-select: none; }
+    .historico-header:hover { background: #1e2330; }
+    .historico-body { display: none; border-top: 1px solid #2a2d36; }
+    .historico-body.abierto { display: block; }
+    .chip { background: rgba(59,130,246,0.15); color: #60a5fa; padding: 0.2rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo">SEN</div>
+  <div class="sidebar-sub">Sistema de Nómina</div>
+  <div class="sidebar-label">Principal</div>
+  <a href="/dashboard" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+  <div class="sidebar-label">Gestión</div>
+  <a href="/empleados" class="nav-link"><i class="bi bi-people-fill"></i> Empleados</a>
+  <a href="/grupos" class="nav-link"><i class="bi bi-diagram-3-fill"></i> Grupos</a>
+  <div class="sidebar-label">Nómina</div>
+  <a href="/novedades" class="nav-link"><i class="bi bi-journal-medical"></i> Novedades</a>
+  <a href="/nomina" class="nav-link activo"><i class="bi bi-calculator-fill"></i> Liquidar</a>
+  <div class="sidebar-footer">
+    <a href="/logout" class="nav-link cerrar"><i class="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
+  </div>
+</nav>
+<main class="contenido">
+  <div class="topbar"><h1>Liquidar Nómina</h1></div>
+
+  {% if error %}
+  <div class="alerta error"><i class="bi bi-exclamation-circle-fill"></i> {{ error }}</div>
+  {% endif %}
+
+  <!-- Panel de liquidación -->
+  <div class="panel">
+    <h2><i class="bi bi-calculator-fill"></i> Calcular nómina del período</h2>
+    <form method="POST" action="/nomina" id="form-nomina">
+      <div class="form-inline">
+        <div>
+          <label>Período *</label>
+          <input type="month" name="periodo" value="{{ periodo_actual }}" required />
+        </div>
+        <button type="submit" class="btn-calc" id="btn-calc">
+          <i class="bi bi-play-fill"></i> Liquidar Nómina
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Resultado del cálculo actual -->
+  {% if resultado %}
+  <div class="tabla-card">
+    <div class="tabla-header">
+      <h3><i class="bi bi-check-circle-fill" style="color:#4ade80"></i>
+        Resultado — {{ resultado[0].periodo }} — {{ resultado|length }} empleados</h3>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Empleado</th>
+          <th>Cargo</th>
+          <th>Salario Base</th>
+          <th>Total Devengado</th>
+          <th>Total Deducciones</th>
+          <th>Neto a Pagar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set total_dev = namespace(v=0) %}
+        {% set total_ded = namespace(v=0) %}
+        {% set total_net = namespace(v=0) %}
+        {% for r in resultado %}
+        {% set total_dev.v = total_dev.v + r.total_devengado %}
+        {% set total_ded.v = total_ded.v + r.total_deducciones %}
+        {% set total_net.v = total_net.v + r.neto %}
+        <tr>
+          <td><i class="bi bi-person-circle" style="color:#3b82f6;margin-right:0.4rem"></i>{{ r.nombre }}</td>
+          <td style="color:#64748b">{{ r.cargo }}</td>
+          <td>${{ "{:,.0f}".format(r.salario_base).replace(",",".") }}</td>
+          <td class="verde">${{ "{:,.0f}".format(r.total_devengado).replace(",",".") }}</td>
+          <td class="rojo">-${{ "{:,.0f}".format(r.total_deducciones).replace(",",".") }}</td>
+          <td class="azul" style="font-weight:700">${{ "{:,.0f}".format(r.neto).replace(",",".") }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">TOTALES</td>
+          <td class="verde">${{ "{:,.0f}".format(total_dev.v).replace(",",".") }}</td>
+          <td class="rojo">-${{ "{:,.0f}".format(total_ded.v).replace(",",".") }}</td>
+          <td class="azul">${{ "{:,.0f}".format(total_net.v).replace(",",".") }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- Histórico de nóminas -->
+  <div class="panel">
+    <h2><i class="bi bi-clock-history"></i> Histórico de Nóminas</h2>
+    {% if nominas %}
+      {% for nom in nominas | reverse %}
+      <div class="historico-item">
+        <div class="historico-header" data-id="{{ nom.id }}" onclick="toggle(this.dataset.id)"></div>
+          <div style="display:flex;align-items:center;gap:0.75rem">
+            <span class="chip">{{ nom.periodo }}</span>
+            <span style="font-size:0.83rem;color:#94a3b8">{{ nom.total_empleados }} empleados</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem">
+            <span style="font-weight:700;color:#4ade80">
+              ${{ "{:,.0f}".format(nom.total_neto).replace(",",".") }}
+            </span>
+            <i class="bi bi-chevron-down" style="color:#475569" id="icon-{{ nom.id }}"></i>
+          </div>
+        </div>
+        <div class="historico-body" id="body-{{ nom.id }}">
+          <table>
+            <thead>
+              <tr>
+                <th>Empleado</th>
+                <th>Devengado</th>
+                <th>Deducciones</th>
+                <th>Neto</th>
+                <th>H. Extra Diur.</th>
+                <th>H. Extra Noct.</th>
+                <th>Días Inc.</th>
+                <th>Días Vac.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for d in nom.detalle %}
+              <tr>
+                <td>{{ d.nombre }}</td>
+                <td class="verde">${{ "{:,.0f}".format(d.total_devengado).replace(",",".") }}</td>
+                <td class="rojo">-${{ "{:,.0f}".format(d.total_deducciones).replace(",",".") }}</td>
+                <td class="azul" style="font-weight:700">${{ "{:,.0f}".format(d.neto).replace(",",".") }}</td>
+                <td>{{ d.extra_diurnas }}h</td>
+                <td>{{ d.extra_nocturnas }}h</td>
+                <td>{{ d.dias_incapacidad }}d</td>
+                <td>{{ d.dias_vacaciones }}d</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="color:#475569;font-size:0.85rem">No hay nóminas liquidadas aún.</p>
+    {% endif %}
+  </div>
+</main>
+<script>
+  function toggle(id) {
+    const body = document.getElementById('body-' + id);
+    const icon = document.getElementById('icon-' + id);
+    body.classList.toggle('abierto');
+    icon.className = body.classList.contains('abierto')
+      ? 'bi bi-chevron-up' : 'bi bi-chevron-down';
+    icon.style.color = '#475569';
+  }
+  document.getElementById('form-nomina').addEventListener('submit', function() {
+    const btn = document.getElementById('btn-calc');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Calculando...';
+  });
+</script>
+</body>
+</html>
